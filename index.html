@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossfade Slideshow</title>
+    <style>
+        /* Ensure HTML and Body take up full viewport height and width */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000; /* Black background for edges if image doesn't perfectly fill */
+            font-family: Arial, sans-serif;
+        }
+
+        .slideshow-container {
+            position: fixed; /* Fix to viewport */
+            top: 0;
+            left: 0;
+            width: 100vw; /* 100% of viewport width */
+            height: 100vh; /* 100% of viewport height */
+            overflow: hidden;
+            /* No border or shadow for a true fullscreen feel */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out; /* Crossfade transition */
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* This is key: it will cover the container while maintaining aspect ratio, cropping if needed */
+            display: block;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slideshow-container">
+        </div>
+
+    <script>
+        const images = [
+            'MIK_FERRARI_LMH_01.jpg', 'MIK_FERRARI_LMH_02.jpg', 'MIK_FERRARI_LMH_03.jpg', 'MIK_FERRARI_LMH_04.jpg', 'MIK_FERRARI_LMH_05.jpg',
+            'MIK_FERRARI_LMH_06.jpg', 'MIK_FERRARI_LMH_07.jpg', 'MIK_FERRARI_LMH_08.jpg', 'MIK_FERRARI_LMH_09.jpg', 'MIK_FERRARI_LMH_10.jpg'
+        ];
+
+        const slideshowContainer = document.querySelector('.slideshow-container');
+        let currentSlideIndex; // Declare without initializing here
+
+        // Create image elements and append them to the container
+        images.forEach((src, index) => {
+            const slideDiv = document.createElement('div');
+            slideDiv.classList.add('slide');
+
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = `Slide ${index + 1}`;
+
+            slideDiv.appendChild(img);
+            slideshowContainer.appendChild(slideDiv);
+        });
+
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Randomize the initial slide index
+        currentSlideIndex = Math.floor(Math.random() * totalSlides);
+        slides[currentSlideIndex].classList.add('active'); // Set the randomly chosen slide as active
+
+        function nextSlide() {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (currentSlideIndex + 1) % totalSlides;
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        // Change slide every 5 seconds (5000 milliseconds)
+        setInterval(nextSlide, 60000);
+    </script>
+
+</body>
+</html>
